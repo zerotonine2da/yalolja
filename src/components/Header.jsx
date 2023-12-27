@@ -6,7 +6,6 @@ import SlideBanner from './banner/SlideBanner';
 const Header = () => {
   return (
     <ScHeader>
-      <NavBar />
       <SlideBanner />
     </ScHeader>
   );
