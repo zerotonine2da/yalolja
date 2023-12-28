@@ -1,0 +1,12 @@
+{
+  "Likes": [
+    {
+      "id": 1,
+      "like_count": 12
+    },
+    {
+      "id": 2,
+      "like_count": 0
+    }
+  ]
+}

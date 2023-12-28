@@ -4,13 +4,17 @@ import Header from '../components/Header';
 import TeamLogos from '../components/TeamLogos';
 import Footer from '../components/Footer';
 import SlideBanner from '../components/banner/SlideBanner';
+import LikeFunc from '../components/like/LikeFunc';
+
 function Main() {
   return (
     <MainContainer>
       <Header />
       <ContentContainer>
         <TeamLogos />
+        <LikeFunc />
       </ContentContainer>
+
       <Footer />
     </MainContainer>
   );
