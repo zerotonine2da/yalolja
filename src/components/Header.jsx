@@ -4,11 +4,7 @@ import styled from 'styled-components';
 import SlideBanner from './banner/SlideBanner';
 
 const Header = () => {
-  return (
-    <ScHeader>
-      <SlideBanner />
-    </ScHeader>
-  );
+  return <ScHeader>{<SlideBanner />}</ScHeader>;
 };
 
 const ScHeader = styled.div`

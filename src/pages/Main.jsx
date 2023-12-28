@@ -9,6 +9,7 @@ import {useRecoilState} from 'recoil';
 import {loginState} from '../recoil/AuthAtom';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import app, {auth} from '../shared/firebase';
+import ProductList from '../components/ProductList';
 
 function Main() {
   //리코일
@@ -35,7 +36,7 @@ function Main() {
         <TeamLogos />
         <LikeFunc />
       </ContentContainer>
-
+      <ProductList />
       <Footer />
     </MainContainer>
   );
