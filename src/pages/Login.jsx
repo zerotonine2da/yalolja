@@ -4,17 +4,25 @@ import Swal from 'sweetalert2';
 import {auth} from '../shared/firebase';
 import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from 'firebase/auth';
 import {useNavigate} from 'react-router-dom';
+import {useRecoilState} from 'recoil';
+import {loginState} from '../recoil/AuthAtom';
 
 function Login() {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const navigate = useNavigate();
 
+  //리코일
+  const [login, setLogin] = useRecoilState(loginState);
+
   const Login = async e => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, id, pw);
-      console.log('로그인 정보 : ', userCredential);
+
+      console.log('로그인 정보 : ', userCredential.user);
+      //리코일 깊은복사
+      setLogin(JSON.parse(JSON.stringify(userCredential.user)));
 
       Swal.fire({
         title: '로그인',
@@ -39,6 +47,9 @@ function Login() {
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
+      //리코일 깊은복사
+      setLogin(JSON.parse(JSON.stringify(userCredential.user)));
+
       Swal.fire({
         title: '로그인',
         text: '로그인 성공.',
@@ -47,8 +58,10 @@ function Login() {
       navigate('/');
     } catch (error) {
       const errorCode = error.code;
-      //const errorMessage = error.message;
-      //console.log(errorCode);
+      const errorMessage = error.message;
+      console.log(error);
+      console.log(errorCode);
+      console.log(errorMessage);
       Swal.fire({
         icon: 'error',
         title: '로그인 실패',
@@ -81,7 +94,7 @@ function Login() {
 
         <label>
           <p>PW </p>
-          <input placeholder="비밀번호 입력" value={pw} onChange={e => setPw(e.target.value)}></input>
+          <input type="password" placeholder="비밀번호 입력" value={pw} onChange={e => setPw(e.target.value)}></input>
         </label>
 
         <button onClick={Login}>로그인</button>
