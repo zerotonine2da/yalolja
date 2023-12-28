@@ -4,6 +4,7 @@ import MyPage from '../pages/MyPage';
 import Login from '../pages/Login';
 import Join from '../pages/Join';
 import Layout from '../components/Layout';
+import ModifyPage from '../pages/ModifyPage';
 
 function Router() {
   return (
@@ -12,6 +13,7 @@ function Router() {
         <Route element={<Layout />}>
           <Route path="/" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/modify" element={<ModifyPage />} />
         </Route>
 
         <Route path="/login" element={<Login />} />
