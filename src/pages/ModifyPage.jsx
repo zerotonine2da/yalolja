@@ -1,12 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import Swal from 'sweetalert2';
-import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import {auth} from '../shared/firebase';
+import {useRecoilState} from 'recoil';
+import styled from 'styled-components';
+import {loginState} from '../recoil/AuthAtom';
+import {useNavigate} from 'react-router-dom';
 
-const Join = () => {
+const ModifyPage = () => {
+  const [login, setLogin] = useRecoilState(loginState);
+  const user = login.email;
+
+  const naviagate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -15,99 +19,46 @@ const Join = () => {
     clearErrors,
   } = useForm({
     defaultValues: {
-      email: '',
       password: '',
-      passwordConfirm: '',
       nickname: '',
+      passwordConfirm: '',
     },
     mode: 'onChange', //실시간 검증 활성화
   });
 
-  const navigate = useNavigate();
+  const handleCancleClick = () => {
+    naviagate(-1);
+  };
 
-  const signUp = async data => {
+  const updateDate = async data => {
+    alert('기능 수정중');
+    console.log(data);
+
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
-
-      Swal.fire({
-        title: '회원가입',
-        text: '회원가입이 완료되었습니다.',
-        icon: 'success',
-      });
-      navigate('/login');
+      //await updatePassword
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
 
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: errMsg(errorCode),
-        //footer: '<a href="#">Why do I have this issue?</a>',
-      });
-    }
-  };
-
-  const errMsg = errorCode => {
-    switch (errorCode) {
-      case 'auth/user-not-found':
-        return '아이디가 필요합니다.';
-
-      case 'auth/wrong-password':
-        return '비밀번호가 일치하지 않습니다.';
-
-      case 'auth/email-already-in-use':
-        return '이미 사용 중인 이메일입니다.';
-
-      case 'auth/network-request-failed':
-        return '네트워크 연결에 실패 하였습니다.';
-
-      case 'auth/invalid-email':
-        return '잘못된 이메일 형식입니다.';
-
-      case 'auth/internal-error':
-        return '잘못된 요청입니다.';
-
-      default:
-        return '로그인에 실패하였습니다.';
+      console.log(errorCode, errorMessage);
     }
   };
 
   return (
-    <StDivWrap>
-      <StDivTop>
-        <h1>Welcome at YalolJa</h1>
-        <p>야롤자에 오신 것을 환영합니다.</p>
-      </StDivTop>
-
+    <StDivWrapped>
       <StDivTitle>
-        <h2>기본정보</h2>
+        <h2>회원 정보 수정</h2>
       </StDivTitle>
 
       <StFormData
         onSubmit={handleSubmit(data => {
-          //event.preventDefault()-//;
-          console.log('가입하기 버튼 클릭시 : ', data);
-          // 유효성 검사를 다시 수행하도록 clearErrors를 호출합니다.
-          clearErrors();
-
-          signUp(data);
+          //signUp(data);
+          updateDate(data);
         })}
       >
         <div>
           <label title="아이디">
-            <input
-              {...register('email', {
-                required: '아이디 입력은 필수입니다.',
-
-                pattern: {
-                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-                  message: '이메일 형식에 맞지 않습니다.',
-                },
-              })}
-              type="email"
-              placeholder="이메일 아이디*"
-            ></input>
+            <input value={user} readOnly></input>
             <p>{errors.email?.message}</p>
           </label>
         </div>
@@ -156,11 +107,33 @@ const Join = () => {
             <p>{errors.nickname?.message}</p>
           </label>
         </div>
-        <button>가입하기</button>
+        <div>
+          <button type="submit">회원정보수정</button>
+          <button onClick={handleCancleClick}>취소</button>
+        </div>
       </StFormData>
-    </StDivWrap>
+    </StDivWrapped>
   );
 };
+
+const StDivWrapped = styled.div`
+  width: 800px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 50px;
+`;
+
+const StDivContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 760px;
+  height: 100vh;
+  border: 1px solid #333;
+`;
 
 const StDivWrap = styled.div`
   width: 600px;
@@ -195,9 +168,6 @@ const StFormData = styled.form`
     margin-bottom: 2.5rem;
   }
 
-  & label {
-  }
-
   & input {
     border: none;
     width: 100%;
@@ -211,8 +181,9 @@ const StFormData = styled.form`
   & button {
     background-color: #1e1e1e;
     color: #fff;
-    width: 600px;
+    width: 300px;
     height: 55px;
+    cursor: pointer;
   }
 
   & p {
@@ -221,5 +192,4 @@ const StFormData = styled.form`
     padding-left: 8px;
   }
 `;
-
-export default Join;
+export default ModifyPage;
