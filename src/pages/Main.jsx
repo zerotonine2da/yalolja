@@ -4,6 +4,8 @@ import Header from '../components/Header';
 import TeamLogos from '../components/TeamLogos';
 import Footer from '../components/Footer';
 import SlideBanner from '../components/banner/SlideBanner';
+import ProductList from '../components/ProductList';
+
 function Main() {
   return (
     <MainContainer>
@@ -11,6 +13,7 @@ function Main() {
       <ContentContainer>
         <TeamLogos />
       </ContentContainer>
+      <ProductList />
       <Footer />
     </MainContainer>
   );
