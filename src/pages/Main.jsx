@@ -8,6 +8,8 @@ import {useRecoilState} from 'recoil';
 import {loginState} from '../recoil/AuthAtom';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import app, {auth} from '../shared/firebase';
+import ProductList from '../components/ProductList';
+
 function Main() {
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
@@ -32,6 +34,7 @@ function Main() {
       <ContentContainer>
         <TeamLogos />
       </ContentContainer>
+      <ProductList />
       <Footer />
     </MainContainer>
   );
