@@ -4,10 +4,12 @@ import Header from '../components/Header';
 import TeamLogos from '../components/TeamLogos';
 import Footer from '../components/Footer';
 import SlideBanner from '../components/banner/SlideBanner';
+import LikeFunc from '../components/like/LikeFunc';
 import {useRecoilState} from 'recoil';
 import {loginState} from '../recoil/AuthAtom';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import app, {auth} from '../shared/firebase';
+
 function Main() {
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
@@ -31,7 +33,9 @@ function Main() {
       <Header />
       <ContentContainer>
         <TeamLogos />
+        <LikeFunc />
       </ContentContainer>
+
       <Footer />
     </MainContainer>
   );
