@@ -1,5 +1,5 @@
 import {db} from '../shared/firebase';
-import {addDoc, collection, doc, getDocs, increment, updateDoc} from 'firebase/firestore';
+import {collection, doc, getDocs, increment, updateDoc} from 'firebase/firestore';
 
 export const getProducts = async () => {
   const querySnapshot = await getDocs(collection(db, 'products'));
