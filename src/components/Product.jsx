@@ -2,12 +2,13 @@ import React from 'react';
 import {useQuery} from 'react-query';
 import {getProducts} from '../api/api';
 import styled from 'styled-components';
+import LikeFunc from './like/LikeFunc';
 
 const Product = () => {
   const {data: products, isLoading, isError} = useQuery('products', getProducts);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <div>로딩 중</div>;
+  if (isError) return <div>에러 발생</div>;
 
   return (
     <>
@@ -23,7 +24,8 @@ const Product = () => {
               </ImgContainer>
               <ScProductContext>
                 <PriceText>{product.price}원</PriceText>
-                <LikeText>👍{product.like}</LikeText>
+
+                <LikeFunc productId={product.id} initialLikeCount={product.like} />
               </ScProductContext>
             </ScProduct>
           ))}

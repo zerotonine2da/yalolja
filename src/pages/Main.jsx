@@ -34,7 +34,6 @@ function Main() {
       <Header />
       <ContentContainer>
         <TeamLogos />
-        <LikeFunc />
       </ContentContainer>
       <ProductList />
       <Footer />
