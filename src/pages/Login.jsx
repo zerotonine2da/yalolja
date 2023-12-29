@@ -5,30 +5,41 @@ import {auth} from '../shared/firebase';
 import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from 'firebase/auth';
 import {useNavigate} from 'react-router-dom';
 import {useRecoilState} from 'recoil';
-import {loginState} from '../recoil/AuthAtom';
+import {adminState, loginState} from '../recoil/AuthAtom';
+import Loading from '../components/Loading';
 
 function Login() {
+  const ADMIN = 'admin@yalolja.com'; //계정이 변경시 수정
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [loading, setloading] = useState(false);
+
   const navigate = useNavigate();
 
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
+  const [admin, setAdmin] = useRecoilState(adminState);
 
   const Login = async e => {
     e.preventDefault();
     try {
+      setloading(true);
       const userCredential = await signInWithEmailAndPassword(auth, id, pw);
-
-      console.log('로그인 정보 : ', userCredential.user);
       //리코일 깊은복사
       setLogin(JSON.parse(JSON.stringify(userCredential.user)));
-
+      setloading(false);
       Swal.fire({
         title: '로그인',
         text: '로그인 성공.',
         icon: 'success',
       });
+
+      //관리자 확인
+
+      if (userCredential.user.email === ADMIN) {
+        setAdmin(true);
+      }
+
       navigate('/');
     } catch (error) {
       const errorCode = error.code;
@@ -39,17 +50,19 @@ function Login() {
         title: '로그인 실패',
         text: errMsg(errorCode),
       });
+      setloading(false);
     }
   };
 
   const LoginGoogle = async e => {
     e.preventDefault();
     try {
+      setloading(true);
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       //리코일 깊은복사
       setLogin(JSON.parse(JSON.stringify(userCredential.user)));
-
+      setloading(false);
       Swal.fire({
         title: '로그인',
         text: '로그인 성공.',
@@ -67,6 +80,7 @@ function Login() {
         title: '로그인 실패',
         text: errMsg(errorCode),
       });
+      setloading(false);
     }
   };
 
@@ -84,6 +98,7 @@ function Login() {
 
   return (
     <ScDiv>
+      {loading ? <Loading /> : null}
       <ScForm>
         <div>LOGIN</div>
 

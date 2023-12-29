@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 import Swal from 'sweetalert2';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {auth} from '../shared/firebase';
+import Loading from '../components/Loading';
 
 const Join = () => {
   const {
@@ -23,21 +24,28 @@ const Join = () => {
     mode: 'onChange', //실시간 검증 활성화
   });
 
+  const [loading, setloading] = useState(false);
   const navigate = useNavigate();
 
   const signUp = async data => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      setloading(true);
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const user = userCredential.user;
+      await updateProfile(user, {displayName: data.nickname});
 
+      //setJoinData(JSON.parse(JSON.stringify(data.nickname)));
+
+      setloading(false);
       Swal.fire({
         title: '회원가입',
         text: '회원가입이 완료되었습니다.',
         icon: 'success',
       });
+
       navigate('/login');
     } catch (error) {
       const errorCode = error.code;
-      const errorMessage = error.message;
 
       Swal.fire({
         icon: 'error',
@@ -45,6 +53,7 @@ const Join = () => {
         text: errMsg(errorCode),
         //footer: '<a href="#">Why do I have this issue?</a>',
       });
+      setloading(false);
     }
   };
 
@@ -75,6 +84,7 @@ const Join = () => {
 
   return (
     <StDivWrap>
+      {loading ? <Loading /> : null}
       <StDivTop>
         <h1>Welcome at YalolJa</h1>
         <p>야롤자에 오신 것을 환영합니다.</p>
