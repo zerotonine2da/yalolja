@@ -15,9 +15,7 @@ const Product = () => {
         <ScProducts>
           {products.map(product => (
             <ScProduct key={product.id}>
-              <ScProductName>
-                <p>{product.productName}</p>
-              </ScProductName>
+              <ScProductName>{product.productName}</ScProductName>
               <ImgContainer>
                 <Img src={product.imgUrl} alt="image" />
               </ImgContainer>
