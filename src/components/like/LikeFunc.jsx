@@ -1,22 +1,46 @@
-import React from 'react';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import React, {useEffect} from 'react';
+import {useMutation, useQueryClient} from 'react-query';
 import styled, {keyframes} from 'styled-components';
-import {toggleLike} from '../../shared/api';
+import {getProducts, addLikeProduct} from '../../api/api';
 
-const LikeFunc = () => {
+const LikeFunc = ({productId, initialLikeCount}) => {
   const queryClient = useQueryClient();
 
-  const {data: likeData} = useQuery('Likes', async () => {
-    const response = await fetch('http://localhost:4000/Likes/1');
-    const data = await response.json();
-    return data;
-  });
+  const {mutate} = useMutation(() => addLikeProduct(productId), {
+    onMutate: async () => {
+      // 이곳에서 요청 이전에 수행할 작업 데이타 불러와
+      const previousData = queryClient.getQueryData('products');
 
-  const {mutate} = useMutation(toggleLike, {
-    onSuccess: newLike => {
-      queryClient.setQueryData('Likes', newLike);
+      // 좋아요 카운트를 증가시켜줌.
+      queryClient.setQueryData('products', prevData => {
+        return prevData.map(product => {
+          if (product.id === productId) {
+            return {...product, like: product.like + 1};
+          }
+          return product;
+        });
+      });
+
+      return {previousData};
+    },
+    onError: context => {
+      // 에러 발생 시 롤백 작업 이전 좋아요 수 보여주기.
+      const {previousData} = context;
+      queryClient.setQueryData('products', previousData);
+    },
+    onSettled: () => {
+      // 비동기 작업이 성공하든 실패하든 마지막에 수행할 작업 사용.
+      // 페이지에서 쿼리를 다시 갱신하도록 변경
+      queryClient.invalidateQueries('products');
     },
   });
+  useEffect(() => {
+    // 다른 페이지에서 돌아올 때 이전 데이터를 캐시에서 가져와서 업데이트
+    const cachedData = queryClient.getQueryData('products');
+    if (cachedData) {
+      queryClient.setQueryData('products', cachedData);
+    }
+  }, [queryClient]);
 
   const handleLikeToggle = () => {
     mutate();
@@ -25,7 +49,7 @@ const LikeFunc = () => {
   return (
     <>
       <ScLikeBt onClick={handleLikeToggle} />
-      <ScLikeCount>{likeData?.like_count || 0}</ScLikeCount>
+      <ScLikeCount>{initialLikeCount}</ScLikeCount>
     </>
   );
 };
@@ -43,8 +67,8 @@ const heartBeat = keyframes`
 `;
 
 const ScLikeBt = styled.button`
-  width: 50px;
-  height: 30px;
+  width: 30px;
+  height: 20px;
   background: none;
   border: none;
   cursor: pointer;
@@ -54,7 +78,7 @@ const ScLikeBt = styled.button`
 
   &:before {
     content: '♡';
-    font-size: 20px;
+    font-size: 15px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -62,14 +86,14 @@ const ScLikeBt = styled.button`
   }
 
   &:active:before {
-    content: '❤️'; /* 하트 모양으로 변경 */
-    color: #e74c3c; /* 원하는 하트 색상으로 변경 */
+    content: '❤️';
+    color: #e74c3c;
   }
 `;
 
 const ScLikeCount = styled.span`
   margin-left: 5px;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 export default LikeFunc;
