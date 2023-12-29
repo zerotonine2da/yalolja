@@ -1,55 +1,97 @@
 import React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {loginState} from '../recoil/AuthAtom';
+import {adminState, loginState} from '../recoil/AuthAtom';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHeart} from '@fortawesome/free-solid-svg-icons';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {useNavigate} from 'react-router-dom';
+import {getAuth} from 'firebase/auth';
 function MyPage() {
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
+  const [isAdmin, setIsAdmin] = useRecoilState(adminState);
   const navigate = useNavigate();
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+  console.log('user: ', user.displayName);
+
   return (
     <StDivWrapped>
-      <StDivTitle>MY PAGE</StDivTitle>
+      <StDivTitle>{isAdmin ? 'ADMIN PAGE (관리자)' : 'MY PAGE'}</StDivTitle>
 
       <div>
-        <h3> {login ? `안녕하세요 ${login.email}님` : ''}</h3>
+        <h3> {login ? `안녕하세요 ${user.displayName}님` : ''}</h3>
       </div>
 
-      <StDivItemWrap>
-        <StDivItem>
-          <label>
-            <button
-              onClick={() => {
-                navigate('/modify');
-              }}
-            >
-              <FontAwesomeIcon icon={faUser} />
-            </button>
+      {isAdmin ? (
+        <>
+          {/*관리자 */}
+          <StDivItemWrap>
+            <StDivItem>
+              <label>
+                <button
+                  onClick={() => {
+                    navigate('/modify');
+                  }}
+                >
+                  <FontAwesomeIcon icon={faUser} size="2x" />
+                </button>
 
-            <h3>PROFILE</h3>
-            <p>회원정보</p>
-          </label>
-        </StDivItem>
-        <StDivItem>
-          <label>
-            <button>
-              <FontAwesomeIcon icon={faHeart} />
-            </button>
+                <h3>PROFILE</h3>
+                <p>관리자 정보</p>
+              </label>
+            </StDivItem>
+            <StDivItem>
+              <label>
+                <button>
+                  <FontAwesomeIcon icon={faPlus} size="2x" />
+                </button>
 
-            <h3>LIKELIST</h3>
-            <p>관심상품</p>
-          </label>
-        </StDivItem>
-      </StDivItemWrap>
+                <h3>Add New</h3>
+                <p>상품 등록</p>
+              </label>
+            </StDivItem>
+          </StDivItemWrap>
+        </>
+      ) : (
+        <>
+          {/*사용자 */}
+          <StDivItemWrap>
+            <StDivItem>
+              <label>
+                <button
+                  onClick={() => {
+                    navigate('/modify');
+                  }}
+                >
+                  <FontAwesomeIcon icon={faUser} size="2x" />
+                </button>
 
-      <StDivContent>
-        <FontAwesomeIcon icon={faHeart} />
-        <p>LIKELIST</p>
-        <div>관심상품 내역이 없습니다.</div>
-      </StDivContent>
+                <h3>PROFILE</h3>
+                <p>회원정보</p>
+              </label>
+            </StDivItem>
+            <StDivItem>
+              <label>
+                <button>
+                  <FontAwesomeIcon icon={faHeart} size="2x" />
+                </button>
+
+                <h3>LIKELIST</h3>
+                <p>관심상품</p>
+              </label>
+            </StDivItem>
+          </StDivItemWrap>
+          <StDivContent>
+            <FontAwesomeIcon icon={faHeart} />
+            <p>LIKELIST</p>
+            <div>관심상품 내역이 없습니다.</div>
+          </StDivContent>
+        </>
+      )}
     </StDivWrapped>
   );
 }
@@ -80,7 +122,6 @@ const StDivItem = styled.div`
   align-items: center;
   border: 1px solid #333;
   padding: 20px;
-  //margin-right: 0.6px;
   cursor: pointer;
 
   & label {

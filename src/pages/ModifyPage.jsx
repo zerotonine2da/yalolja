@@ -1,51 +1,132 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useRecoilState} from 'recoil';
 import styled from 'styled-components';
-import {loginState} from '../recoil/AuthAtom';
+import {adminState, loginState} from '../recoil/AuthAtom';
 import {useNavigate} from 'react-router-dom';
+import {
+  EmailAuthProvider,
+  deleteUser,
+  getAuth,
+  reauthenticateWithCredential,
+  updatePassword,
+  updateProfile,
+} from 'firebase/auth';
+import Swal from 'sweetalert2';
+import Loading from '../components/Loading';
 
 const ModifyPage = () => {
   const [login, setLogin] = useRecoilState(loginState);
-  const user = login.email;
+  const [loading, setloading] = useState(false);
 
-  const naviagate = useNavigate();
+  //리코일
+  const [admin, setAdmin] = useRecoilState(adminState);
+
+  const userEmail = login.email;
+  const navigate = useNavigate();
+
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const {
     register,
     handleSubmit,
     watch,
     formState: {errors},
-    clearErrors,
   } = useForm({
     defaultValues: {
       password: '',
-      nickname: '',
+      nickname: user.displayName,
       passwordConfirm: '',
     },
     mode: 'onChange', //실시간 검증 활성화
   });
 
   const handleCancleClick = () => {
-    naviagate(-1);
+    navigate(-1);
+  };
+
+  const handleDeleteClick = async () => {
+    Swal.fire({
+      title: '비밀번호를 입력하세요',
+      input: 'password',
+      inputAttributes: {
+        autocapitalize: 'off',
+      },
+
+      showCancelButton: true,
+      cancelButtonText: '취소',
+      confirmButtonText: '탈퇴',
+      showLoaderOnConfirm: true,
+    }).then(async result => {
+      if (result.dismiss === Swal.DismissReason.cancel) {
+        return;
+      }
+
+      const credential = EmailAuthProvider.credential(user.email, result.value);
+
+      if (credential) {
+        setloading(true);
+        try {
+          const passwordCHK = await reauthenticateWithCredential(user, credential);
+          if (passwordCHK) {
+            navigate('/');
+            await deleteUser(user);
+            setloading(false);
+            //리코일(1) 로그인 데이터
+            setLogin(null);
+
+            //리코일(2) 관리자 권한 false
+            setAdmin(false);
+            navigate('/');
+            Swal.fire({
+              title: '회원탈퇴',
+              text: '회원탈퇴가 완료되었습니다.',
+              icon: 'success',
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            title: '비밀번호 오류',
+            text: '비밀번호가 틀립니다',
+            icon: 'error',
+          });
+          setloading(false);
+          return;
+        }
+      }
+    });
   };
 
   const updateDate = async data => {
-    alert('기능 수정중');
-    console.log(data);
-
     try {
-      //await updatePassword
+      const newPassword = data.password;
+      const newNickName = data.nickname;
+
+      setloading(true);
+      await updatePassword(user, newPassword);
+      await updateProfile(user, {displayName: newNickName});
+
+      //setJoinData(newNickName);
+      setloading(false);
+      Swal.fire({
+        title: '회원정보수정',
+        text: '회원정보수정이 완료되었습니다.',
+        icon: 'success',
+      });
+      navigate('/mypage');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
 
       console.log(errorCode, errorMessage);
+      setloading(false);
     }
   };
 
   return (
     <StDivWrapped>
+      {loading ? <Loading /> : null}
       <StDivTitle>
         <h2>회원 정보 수정</h2>
       </StDivTitle>
@@ -58,7 +139,7 @@ const ModifyPage = () => {
       >
         <div>
           <label title="아이디">
-            <input value={user} readOnly></input>
+            <input value={userEmail} readOnly></input>
             <p>{errors.email?.message}</p>
           </label>
         </div>
@@ -111,6 +192,12 @@ const ModifyPage = () => {
           <button type="submit">회원정보수정</button>
           <button onClick={handleCancleClick}>취소</button>
         </div>
+
+        {/*사용자 only */}
+
+        <StDivDelete>
+          <button onClick={handleDeleteClick}>탈퇴하기</button>
+        </StDivDelete>
       </StFormData>
     </StDivWrapped>
   );
@@ -124,32 +211,6 @@ const StDivWrapped = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 50px;
-`;
-
-const StDivContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 760px;
-  height: 100vh;
-  border: 1px solid #333;
-`;
-
-const StDivWrap = styled.div`
-  width: 600px;
-  height: 100vh;
-  margin: auto;
-  padding-top: 60px;
-`;
-
-const StDivTop = styled.div`
-  font-weight: 400;
-  font-size: 20px;
-
-  & p {
-    font-size: 15px;
-    margin-top: 8px;
-  }
 `;
 
 const StDivTitle = styled.div`
@@ -192,4 +253,20 @@ const StFormData = styled.form`
     padding-left: 8px;
   }
 `;
+
+const StDivDelete = styled.div`
+  left: 45%;
+  position: fixed;
+  bottom: 5%;
+  cursor: pointer;
+
+  & button {
+    width: 100px;
+    height: 30px;
+    background-color: transparent;
+    color: #777;
+    border: none;
+  }
+`;
+
 export default ModifyPage;
