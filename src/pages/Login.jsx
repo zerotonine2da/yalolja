@@ -18,6 +18,7 @@ function Login() {
 
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
+
   const [admin, setAdmin] = useRecoilState(adminState);
 
   const Login = async e => {

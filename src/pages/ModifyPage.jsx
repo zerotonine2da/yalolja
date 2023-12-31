@@ -17,7 +17,7 @@ import Loading from '../components/Loading';
 
 const ModifyPage = () => {
   const [login, setLogin] = useRecoilState(loginState);
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(false); // 스피니 로딩
 
   //리코일
   const [admin, setAdmin] = useRecoilState(adminState);
@@ -43,7 +43,7 @@ const ModifyPage = () => {
   });
 
   const handleCancleClick = () => {
-    navigate(-1);
+    navigate('/mypage');
   };
 
   const handleDeleteClick = async () => {
@@ -53,7 +53,7 @@ const ModifyPage = () => {
       inputAttributes: {
         autocapitalize: 'off',
       },
-
+      width: '450px',
       showCancelButton: true,
       cancelButtonText: '취소',
       confirmButtonText: '탈퇴',
@@ -194,10 +194,11 @@ const ModifyPage = () => {
         </div>
 
         {/*사용자 only */}
-
-        <StDivDelete>
-          <button onClick={handleDeleteClick}>탈퇴하기</button>
-        </StDivDelete>
+        {admin ? null : (
+          <StDivDelete>
+            <button onClick={handleDeleteClick}>탈퇴하기</button>
+          </StDivDelete>
+        )}
       </StFormData>
     </StDivWrapped>
   );
@@ -255,7 +256,7 @@ const StFormData = styled.form`
 `;
 
 const StDivDelete = styled.div`
-  left: 45%;
+  left: 47%;
   position: fixed;
   bottom: 5%;
   cursor: pointer;
@@ -267,6 +268,10 @@ const StDivDelete = styled.div`
     color: #777;
     border: none;
   }
+`;
+
+const StSpanAlertMSG = styled.span`
+  font-size: 10px;
 `;
 
 export default ModifyPage;

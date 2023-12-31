@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {adminState, loginState} from '../recoil/AuthAtom';
 import styled from 'styled-components';
@@ -8,14 +8,30 @@ import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {useNavigate} from 'react-router-dom';
 import {getAuth} from 'firebase/auth';
+import Product from '../components/Product';
 function MyPage() {
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
   const [isAdmin, setIsAdmin] = useRecoilState(adminState);
   const navigate = useNavigate();
 
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const auth = await getAuth();
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          setUser(currentUser);
+        }
+      } catch (error) {
+        console.log('Mypage - useEffect- fetchUser Error');
+      }
+    };
+    fetchUser();
+  }, []);
+
   console.log('user: ', user.displayName);
 
   return (
@@ -88,6 +104,7 @@ function MyPage() {
           <StDivContent>
             <FontAwesomeIcon icon={faHeart} />
             <p>LIKELIST</p>
+            <Product />
             <div>관심상품 내역이 없습니다.</div>
           </StDivContent>
         </>
@@ -104,6 +121,7 @@ const StDivWrapped = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 50px;
+  border-bottom: 1px solid #222;
 `;
 
 const StDivTitle = styled.div`
@@ -153,7 +171,7 @@ const StDivItem = styled.div`
 `;
 
 const StDivContent = styled.div`
-  width: 760px;
+  width: 1000px;
   height: 100vh;
   border: 1px solid #333;
 `;
