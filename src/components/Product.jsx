@@ -8,7 +8,7 @@ const Product = () => {
   const {data: products, isLoading, isError} = useQuery('products', getProducts);
 
   if (isLoading) return <div>로딩 중</div>;
-  if (isError) return <div>에러 발생</div>;
+  if (isError || !products) return <div>에러 발생</div>;
 
   return (
     <>
