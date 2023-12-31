@@ -2,31 +2,51 @@ import React, {useEffect} from 'react';
 import {useMutation, useQueryClient} from 'react-query';
 import styled, {keyframes} from 'styled-components';
 import {getProducts, addLikeProduct} from '../../api/api';
+import {useRecoilValue} from 'recoil';
+import {loginState} from '../../recoil/AuthAtom';
+import Swal from 'sweetalert2';
+import {auth} from '../../shared/firebase';
 
 const LikeFunc = ({productId, initialLikeCount}) => {
   const queryClient = useQueryClient();
+  const isLoggedin = useRecoilValue(loginState);
 
-  const {mutate} = useMutation(() => addLikeProduct(productId), {
+  const {mutate} = useMutation(() => addLikeProduct(isLoggedin, productId), {
     onMutate: async () => {
-      // 이곳에서 요청 이전에 수행할 작업 데이타 불러와
+      // 데이터를 가져와줌
       const previousData = queryClient.getQueryData('products');
 
-      // 좋아요 카운트를 증가시켜줌.
+      // prevData가 undefined인 경우 초기화
+      if (!previousData) {
+        return;
+      }
+
+      let currentLikeCount = 0;
+
       queryClient.setQueryData('products', prevData => {
-        return prevData.map(product => {
+        const updatedData = prevData.map(product => {
           if (product.id === productId) {
-            return {...product, like: product.like + 1};
+            // 현재 좋아요 수 가져오기
+            currentLikeCount = product.like;
+
+            // 좋아요 증가 또는 감소
+            //return {...product, like: currentLikeCount + (isLoggedin ? 1 : -1)};
           }
           return product;
         });
+
+        return updatedData;
       });
 
-      return {previousData};
+      // 반드시 previousData와 현재 좋아요 수를 추가
+      return {previousData, currentLikeCount};
     },
     onError: context => {
       // 에러 발생 시 롤백 작업 이전 좋아요 수 보여주기.
-      const {previousData} = context;
-      queryClient.setQueryData('products', previousData);
+      const {previousData} = context || {};
+      if (previousData) {
+        queryClient.setQueryData('products', previousData);
+      }
     },
     onSettled: () => {
       // 비동기 작업이 성공하든 실패하든 마지막에 수행할 작업 사용.
@@ -34,16 +54,17 @@ const LikeFunc = ({productId, initialLikeCount}) => {
       queryClient.invalidateQueries('products');
     },
   });
-  useEffect(() => {
-    // 다른 페이지에서 돌아올 때 이전 데이터를 캐시에서 가져와서 업데이트
-    const cachedData = queryClient.getQueryData('products');
-    if (cachedData) {
-      queryClient.setQueryData('products', cachedData);
-    }
-  }, [queryClient]);
 
   const handleLikeToggle = () => {
-    mutate();
+    if (isLoggedin) {
+      mutate();
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: '로그인이 필요합니다.',
+        text: '로그인후 좋아요를 추가할 수 있습니다.',
+      });
+    }
   };
 
   return (
