@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {faArrowRightToBracket} from '@fortawesome/free-solid-svg-icons';
-import {useRecoilState} from 'recoil';
-import {adminState, loginState} from '../recoil/AuthAtom';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {adminState, googleLogin, loginState} from '../recoil/AuthAtom';
 import Swal from 'sweetalert2';
 import {getAuth, signOut} from 'firebase/auth';
 
@@ -13,6 +13,7 @@ const NavBar = () => {
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
   const [admin, setAdmin] = useRecoilState(adminState);
+  const setGoogleLogin = useSetRecoilState(googleLogin);
   const navigate = useNavigate();
 
   const logOut = async () => {
@@ -22,10 +23,12 @@ const NavBar = () => {
         navigate('/');
         await signOut(auth);
         //리코일(1) 로그인 데이터
-        setLogin(null);
-
         //리코일(2) 관리자 권한 false
+        //리코일(3) 구글 로그인 여부 false
+        setLogin(null);
         setAdmin(false);
+        setGoogleLogin(false);
+
         navigate('/');
 
         Swal.fire({
