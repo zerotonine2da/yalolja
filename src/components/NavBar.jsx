@@ -53,11 +53,35 @@ const NavBar = () => {
           </label>
           <StDivSidebar className="sidebar">
             <ul>
-              <li>TOP</li>
-              <li>Bottom</li>
-              <li>Accessories</li>
+              <li
+                onClick={() => {
+                  navigate('/top');
+                }}
+              >
+                TOP
+              </li>
+              <li
+                onClick={() => {
+                  navigate('/bottom');
+                }}
+              >
+                Bottom
+              </li>
+              <li
+                onClick={() => {
+                  navigate('/acc');
+                }}
+              >
+                Accessories
+              </li>
               <li>NEW</li>
-              <li>HIT</li>
+              <li
+                onClick={() => {
+                  navigate('/hit');
+                }}
+              >
+                HIT
+              </li>
             </ul>
           </StDivSidebar>
         </ScDivIcon>

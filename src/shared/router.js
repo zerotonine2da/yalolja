@@ -5,6 +5,10 @@ import Login from '../pages/Login';
 import Join from '../pages/Join';
 import Layout from '../components/Layout';
 import ModifyPage from '../pages/ModifyPage';
+import TopProductsList from '../pages/TopProductsList';
+import AccProductsList from '../pages/AccProductsList';
+import BottomProductsList from '../pages/BottomProductsList';
+import HitProductsList from '../pages/HitProductsList';
 
 function Router() {
   return (
@@ -14,6 +18,10 @@ function Router() {
           <Route path="/" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/modify" element={<ModifyPage />} />
+          <Route path="/top" element={<TopProductsList />} />
+          <Route path="/acc" element={<AccProductsList />} />
+          <Route path="/bottom" element={<BottomProductsList />} />
+          <Route path="/hit" element={<HitProductsList />} />
         </Route>
 
         <Route path="/login" element={<Login />} />

@@ -15,9 +15,19 @@ const teamState = atom({
   default: '',
 });
 
+const categoryState = atom({
+  key: 'categoryState',
+  default: '',
+});
+
 const isLatestState = atom({
   key: 'isLatestState',
   default: false,
+});
+
+const likeState = atom({
+  key: 'likeState',
+  default: 0,
 });
 
 const imgUploadState = atom({
@@ -28,4 +38,4 @@ const imgUploadState = atom({
   },
 });
 
-export {productNameState, priceState, teamState, isLatestState, imgUploadState};
+export {productNameState, priceState, teamState, isLatestState, imgUploadState, categoryState, likeState};
