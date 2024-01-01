@@ -12,6 +12,15 @@ import {
   where,
 } from 'firebase/firestore';
 
+export const getProducts = async () => {
+  const q = query(collection(db, 'products'));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};
+
 export const getLatestProducts = async () => {
   const q = query(collection(db, 'products'), where('isLatest', '==', true));
   const querySnapshot = await getDocs(q);
