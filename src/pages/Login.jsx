@@ -4,8 +4,8 @@ import Swal from 'sweetalert2';
 import {auth} from '../shared/firebase';
 import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from 'firebase/auth';
 import {useNavigate} from 'react-router-dom';
-import {useRecoilState} from 'recoil';
-import {adminState, loginState} from '../recoil/AuthAtom';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {adminState, googleLogin, loginState} from '../recoil/AuthAtom';
 import Loading from '../components/Loading';
 
 function Login() {
@@ -20,7 +20,7 @@ function Login() {
   const [login, setLogin] = useRecoilState(loginState);
 
   const [admin, setAdmin] = useRecoilState(adminState);
-
+  const setGoogleLogin = useSetRecoilState(googleLogin);
   const Login = async e => {
     e.preventDefault();
     try {
@@ -64,6 +64,7 @@ function Login() {
       //리코일 깊은복사
       setLogin(JSON.parse(JSON.stringify(userCredential.user)));
       setloading(false);
+      setGoogleLogin(true);
       Swal.fire({
         title: '로그인',
         text: '로그인 성공.',
@@ -101,7 +102,7 @@ function Login() {
     <ScDiv>
       {loading ? <Loading /> : null}
       <ScForm>
-        <div>LOGIN</div>
+        <h2>LOGIN</h2>
 
         <label>
           <p>ID </p>
@@ -141,6 +142,12 @@ const ScForm = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
+  & h2 {
+    font-weight: 600;
+    font-size: 34px;
+    padding-bottom: 10px;
+  }
 
   & label {
     border: 1px solid gray;
@@ -198,6 +205,12 @@ const ScDivJoin = styled.div`
     font-size: 16px;
     color: #1e1e1e;
     text-decoration: none;
+    &:hover {
+      border: 2px solid #e35b5b;
+
+      font-weight: 600;
+      color: #e35b5b;
+    }
   }
 `;
 

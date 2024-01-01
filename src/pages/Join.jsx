@@ -219,10 +219,24 @@ const StFormData = styled.form`
   }
 
   & button {
-    background-color: #1e1e1e;
-    color: #fff;
+    background-color: transparent;
+    color: #1e1e1e;
+    //box-shadow: rgba(36, 33, 33, 0.4) 0px 0px 0px 3px;
+    border: 2px solid #1e1e1e;
     width: 600px;
     height: 55px;
+
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #1e1e1e;
+      color: #fff;
+
+      box-shadow: none;
+      border: none;
+    }
   }
 
   & p {

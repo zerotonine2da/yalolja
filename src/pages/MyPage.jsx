@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {adminState, loginState} from '../recoil/AuthAtom';
+import {adminState, googleLogin, loginState} from '../recoil/AuthAtom';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHeart} from '@fortawesome/free-solid-svg-icons';
@@ -8,14 +8,17 @@ import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {useNavigate} from 'react-router-dom';
 import {getAuth} from 'firebase/auth';
-import Product from '../components/Product';
+import LikeProduct from '../components/LikeProduct';
+import Swal from 'sweetalert2';
+
 function MyPage() {
   //리코일
   const [login, setLogin] = useRecoilState(loginState);
   const [isAdmin, setIsAdmin] = useRecoilState(adminState);
+  const googleLoginCheck = useRecoilValue(googleLogin);
   const navigate = useNavigate();
 
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState(login);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -33,6 +36,19 @@ function MyPage() {
   }, []);
 
   console.log('user: ', user.displayName);
+
+  const modifyProfile = () => {
+    if (googleLoginCheck) {
+      Swal.fire({
+        title: '구글 로그인 안내',
+        text: '구글계정은 구글에서 직접 수정하셔야합니다.',
+        icon: 'warning',
+      });
+      return;
+    } else {
+      navigate('/modify');
+    }
+  };
 
   return (
     <StDivWrapped>
@@ -78,11 +94,7 @@ function MyPage() {
           <StDivItemWrap>
             <StDivItem>
               <label>
-                <button
-                  onClick={() => {
-                    navigate('/modify');
-                  }}
-                >
+                <button onClick={modifyProfile}>
                   <FontAwesomeIcon icon={faUser} size="2x" />
                 </button>
 
@@ -102,10 +114,12 @@ function MyPage() {
             </StDivItem>
           </StDivItemWrap>
           <StDivContent>
-            <FontAwesomeIcon icon={faHeart} />
-            <p>LIKELIST</p>
-            <Product />
-            <div>관심상품 내역이 없습니다.</div>
+            <div>
+              <FontAwesomeIcon icon={faHeart} />
+              <p>LIKELIST</p>
+            </div>
+            <StDivborderLine></StDivborderLine>
+            <LikeProduct />
           </StDivContent>
         </>
       )}
@@ -171,9 +185,24 @@ const StDivItem = styled.div`
 `;
 
 const StDivContent = styled.div`
-  width: 1000px;
-  height: 100vh;
-  border: 1px solid #333;
+  & div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+
+    & p {
+      font-weight: 700;
+      font-size: 20px;
+    }
+  }
+  width: 1250px;
+  //height: 100vh;
+`;
+
+const StDivborderLine = styled.div`
+  border-bottom: 1px solid #333;
 `;
 
 export default MyPage;

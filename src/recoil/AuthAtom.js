@@ -17,8 +17,9 @@ export const adminState = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-//비동기 작업 진행 중 : 로딩 상태 확인
-export const loadingState = atom({
-  key: 'loadingState',
+//구글 계정 확인 -> 마이페이지 : 회원정보 불가능
+export const googleLogin = atom({
+  key: 'googleLogin',
   default: false,
+  effects_UNSTABLE: [persistAtom],
 });
