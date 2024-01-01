@@ -1,14 +1,14 @@
 import React from 'react';
 import {useQuery} from 'react-query';
-import {getLatestProducts} from '../api/api';
+import {getHitProducts} from '../api/api';
 import styled from 'styled-components';
 import LikeFunc from './like/LikeFunc';
 
-const Product = ({page}) => {
-  const {data: products, isLoading, isError} = useQuery('products', getLatestProducts);
+const HitProducts = ({page}) => {
+  const {data: products, isLoading, isError} = useQuery('products', getHitProducts);
 
   if (isLoading) return <div>로딩 중</div>;
-  if (isError || !products) return <div>에러 발생</div>;
+  if (isError) return <div>에러 발생</div>;
 
   const productsPerPage = 5;
   const startIndex = (page - 1) * productsPerPage;
@@ -97,4 +97,4 @@ const LatestCheck = styled.p`
   padding: 5px;
 `;
 
-export default Product;
+export default HitProducts;

@@ -1,20 +1,16 @@
 import React, {useState} from 'react';
-import Product from './Product';
 import styled from 'styled-components';
-import Button from './UI/Button';
-import ProductModal from './UI/ProductModal';
 import 'firebase/firestore';
 import {useQuery} from 'react-query';
-import {getLatestProducts} from '../api/api';
+import {getBottomProducts} from '../api/api';
+import BottomProducts from '../components/BottomProducts';
 
-const ProductList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const BottomProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const {data: products, isLoading, isError} = useQuery('products', getLatestProducts);
+  const {data: products, isLoading, isError} = useQuery('products', getBottomProducts);
 
   console.log('Rendering ProductList component. State and props:', {
-    isModalOpen,
     isLoading,
     isError,
     products,
@@ -25,23 +21,13 @@ const ProductList = () => {
 
   const totalPage = Math.ceil(products.length / 5);
 
-  const handleAddProduct = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handlePageChange = newPage => {
     setCurrentPage(newPage);
   };
 
   return (
     <ScProductWrapper>
-      <Button onClick={handleAddProduct} />
-      {isModalOpen && <ProductModal onClose={handleCloseModal} />}
-      <Product page={currentPage} />
+      <BottomProducts page={currentPage} />
       <Pagination>
         <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
           이전
@@ -65,4 +51,4 @@ const Pagination = styled.div`
   margin-top: 10px;
 `;
 
-export default ProductList;
+export default BottomProductsList;
