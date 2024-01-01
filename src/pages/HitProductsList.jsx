@@ -5,7 +5,7 @@ import {useQuery} from 'react-query';
 import {getHitProducts} from '../api/api';
 import HitProducts from '../components/HitProducts';
 
-const BottomProductsList = () => {
+const HitProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const {data: products, isLoading, isError} = useQuery('products', getHitProducts);
@@ -51,4 +51,4 @@ const Pagination = styled.div`
   margin-top: 10px;
 `;
 
-export default BottomProductsList;
+export default HitProductsList;
