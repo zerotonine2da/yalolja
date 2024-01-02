@@ -22,19 +22,24 @@ const Product = ({page}) => {
     navigate(`/product/${productId}`);
   };
 
+  //제목 문자열 일정수 이상일시 그 이상 문자열 ... 출력
+  const truncate = (str, n) => {
+    return str?.length > n ? str.substr(0, n - 1) + '...' : str;
+  };
+
   return (
     <>
+      <h1>인기 많은 제품들</h1>
       <ScProductContainer>
         <ScProducts>
           {productsToDisplay.map(product => (
-            <ScProduct key={product.id} onClick={() => handleProductClick(product.id)}>
-              <ScProductName>{product.productName}</ScProductName>
-              <ImgContainer>
+            <ScProduct key={product.id}>
+              <ScProductName>{truncate(product.productName, 26)}</ScProductName>
+              <ImgContainer onClick={() => handleProductClick(product.id)}>
                 <Img src={product.imgUrl} alt="image" />
               </ImgContainer>
               <ScProductContext>
                 <PriceText>{product.price}원</PriceText>
-
                 <LikeFunc productId={product.id} initialLikeCount={product.like} />
                 <LatestCheck>{product.isLatest}</LatestCheck>
               </ScProductContext>
@@ -50,12 +55,13 @@ const ScProductContainer = styled.div`
   width: 100%;
   display: flex;
   padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
 `;
 
 const ScProducts = styled.ul`
   list-style: none;
   display: flex;
-
   justify-content: flex-start;
 `;
 

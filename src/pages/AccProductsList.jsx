@@ -5,6 +5,8 @@ import {useQuery} from 'react-query';
 import {getAccProducts} from '../api/api';
 import AccProducts from '../components/AccProducts';
 import Pagination from '../components/UI/Pagination';
+import Header from '../components/Header';
+import TeamLogos from '../components/TeamLogos';
 
 const AccProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,15 +27,19 @@ const AccProductsList = () => {
   };
 
   return (
-    <ScProductWrapper>
-      <AccProducts page={currentPage} />
-      <Pagination
-        currentPage={currentPage}
-        itemsPerPage={5}
-        totalItems={products.length}
-        onPageChange={handlePageChange}
-      />
-    </ScProductWrapper>
+    <>
+      <Header />
+      <TeamLogos />
+      <ScProductWrapper>
+        <AccProducts page={currentPage} />
+        <Pagination
+          currentPage={currentPage}
+          itemsPerPage={5}
+          totalItems={products.length}
+          onPageChange={handlePageChange}
+        />
+      </ScProductWrapper>
+    </>
   );
 };
 
