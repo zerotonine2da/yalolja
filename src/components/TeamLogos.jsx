@@ -42,8 +42,10 @@ const TeamLogos = () => {
     <ScTeamLogos>
       <Slider {...sliderSettings}>
         {teamLogos.map((logo, index) => (
-          <ScLogo key={index} onClick={() => handleLogoClick(logo)} selected={selectedLogo === logo}>
-            <img src={logo} alt={`Team Logo ${index + 1}`} />
+          <ScLogo key={index} onClick={() => handleLogoClick(logo, index)} selected={selectedLogo === logo}>
+            <a href={teamLinks[index]} target="_blank" rel="noopener noreferrer">
+              <img src={logo} alt={`Team Logo ${index + 1}`} />
+            </a>
           </ScLogo>
         ))}
       </Slider>
@@ -69,7 +71,7 @@ const ScLogo = styled.div`
     ${props =>
       props.selected &&
       `
-    border: 2px solid black; 
+   
   `}
   }
 `;
@@ -85,6 +87,19 @@ const teamLogos = [
   KtLogo,
   LilvLogo,
   DplusLogo,
+];
+
+const teamLinks = [
+  'https://www.t1.gg/',
+  'https://kr.geng.gg/',
+  'https://hle.kr/',
+  'https://freecs.gg/',
+  'https://brionesports.gg/',
+  'https://drx.gg/',
+  'https://ns-esports.com/',
+  'https://rolster.bstage.in/',
+  'https://fearx.gg/',
+  'https://dpluskia.gg/',
 ];
 
 export default TeamLogos;
