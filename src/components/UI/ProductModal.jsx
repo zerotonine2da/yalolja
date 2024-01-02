@@ -474,7 +474,6 @@ const ScDivRadioLayout = styled.div`
       width: 20px;
       font-size: 13px;
       font-weight: 0;
-      text-
     }
   }
 `;
