@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -42,14 +42,12 @@ const NavBar = () => {
     }
   };
 
-  const setWidth = () => {};
-
   return (
     <div>
       <ScNav>
         <ScDivIcon>
           <input type="checkbox" id="menuicon"></input>
-          <label for="menuicon">
+          <label htmlFor="menuicon">
             <span></span>
             <span></span>
             <span></span>
@@ -77,7 +75,7 @@ const NavBar = () => {
               >
                 Accessories
               </li>
-              <li>NEW</li>
+
               <li
                 onClick={() => {
                   navigate('/hit');
@@ -100,7 +98,7 @@ const NavBar = () => {
           {login ? (
             <>
               <button onClick={logOut}>
-                <FontAwesomeIcon icon={faArrowRightToBracket} font-size="20px" />
+                <FontAwesomeIcon icon={faArrowRightToBracket} fontSize="20px" />
                 <p>로그아웃</p>
               </button>
 
@@ -110,7 +108,7 @@ const NavBar = () => {
                 }}
               >
                 <label>
-                  <FontAwesomeIcon icon={faUser} font-size="20px" />
+                  <FontAwesomeIcon icon={faUser} fontSize="20px" />
                   {admin ? <p>마이페이지(관리자)</p> : <p>마이페이지</p>}
                 </label>
               </button>
@@ -122,7 +120,7 @@ const NavBar = () => {
                   navigate('/login');
                 }}
               >
-                <FontAwesomeIcon icon={faArrowRightToBracket} font-size="20px" />
+                <FontAwesomeIcon icon={faArrowRightToBracket} fontSize="20px" />
                 <p>로그인</p>
               </button>
               <button
@@ -131,7 +129,7 @@ const NavBar = () => {
                 }}
               >
                 <label>
-                  <FontAwesomeIcon icon={faUser} font-size="20px" />
+                  <FontAwesomeIcon icon={faUser} fontSize="20px" />
                   <p>마이페이지</p>
                 </label>
               </button>
@@ -176,9 +174,12 @@ const ScDivTitle = styled.div`
 `;
 
 const ScDivIcon = styled.div`
+  width: 140px;
+  margin-left: 20px;
   //z-index: 999;
   & input {
     display: none;
+    padding-left: 60px;
   }
 
   & label {
@@ -231,12 +232,12 @@ const ScDivIcon = styled.div`
 `;
 
 const StDivSidebar = styled.div`
-  width: 310px;
-  height: 600px;
+  width: 270px;
+  height: 400px;
   background-color: #333;
   position: fixed;
   top: 0;
-  left: -310px;
+  left: -270px;
   z-index: 1;
   transition: left 0.35s;
 
