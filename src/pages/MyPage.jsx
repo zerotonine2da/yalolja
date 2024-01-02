@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import {getAuth} from 'firebase/auth';
 import LikeProduct from '../components/LikeProduct';
 import Swal from 'sweetalert2';
+import ProductModal from '../components/UI/ProductModal';
 
 function MyPage() {
   //리코일
@@ -19,6 +20,7 @@ function MyPage() {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(login);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,7 +37,15 @@ function MyPage() {
     fetchUser();
   }, []);
 
-  console.log('user: ', user.displayName);
+  //console.log('user: ', user.displayName);
+
+  const handleAddProduct = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const modifyProfile = () => {
     if (googleLoginCheck) {
@@ -78,9 +88,10 @@ function MyPage() {
             </StDivItem>
             <StDivItem>
               <label>
-                <button>
+                <button onClick={handleAddProduct}>
                   <FontAwesomeIcon icon={faPlus} size="2x" />
                 </button>
+                {isModalOpen && <ProductModal onClose={handleCloseModal} />}
 
                 <h3>Add New</h3>
                 <p>상품 등록</p>
@@ -114,11 +125,6 @@ function MyPage() {
             </StDivItem>
           </StDivItemWrap>
           <StDivContent>
-            <div>
-              <FontAwesomeIcon icon={faHeart} />
-              <p>LIKELIST</p>
-            </div>
-            <StDivborderLine></StDivborderLine>
             <LikeProduct />
           </StDivContent>
         </>
@@ -135,7 +141,6 @@ const StDivWrapped = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 50px;
-  border-bottom: 1px solid #222;
 `;
 
 const StDivTitle = styled.div`
@@ -198,11 +203,6 @@ const StDivContent = styled.div`
     }
   }
   width: 1250px;
-  //height: 100vh;
-`;
-
-const StDivborderLine = styled.div`
-  border-bottom: 1px solid #333;
 `;
 
 export default MyPage;

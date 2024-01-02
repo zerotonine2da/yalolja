@@ -6,13 +6,16 @@ import ProductModal from './UI/ProductModal';
 import 'firebase/firestore';
 import {useQuery} from 'react-query';
 import {getLatestProducts} from '../api/api';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {adminState} from '../recoil/AuthAtom';
 
 const ProductList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const isAdmin = useRecoilValue(adminState);
   const {data: products, isLoading, isError} = useQuery('products', getLatestProducts);
 
+  console.log('isAdmin', isAdmin);
   console.log('Rendering ProductList component. State and props:', {
     isModalOpen,
     isLoading,
@@ -39,8 +42,16 @@ const ProductList = () => {
 
   return (
     <ScProductWrapper>
+      {isAdmin ? (
+        <>
+          <Button onClick={handleAddProduct} />
+          {isModalOpen && <ProductModal onClose={handleCloseModal} />}
+        </>
+      ) : null}
+      {/*-----테스트할때 기존코드로 사용시, 등록 모든 계정에서 사용 가능-----* 
       <Button onClick={handleAddProduct} />
       {isModalOpen && <ProductModal onClose={handleCloseModal} />}
+     */}
       <Product page={currentPage} />
       <Pagination>
         <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
