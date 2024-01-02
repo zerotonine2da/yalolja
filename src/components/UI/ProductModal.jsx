@@ -7,10 +7,12 @@ import {
   teamState,
   isLatestState,
   categoryState,
+  productIdState,
 } from '../../recoil/productModal';
 import {useRecoilState} from 'recoil';
+import {v4 as uuidv4} from 'uuid';
 
-import {addDoc, collection, serverTimestamp} from 'firebase/firestore';
+import {addDoc, collection, getDocs, query, serverTimestamp, writeBatch} from 'firebase/firestore';
 import {db, storage} from '../../shared/firebase';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 import {faImage} from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +21,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Loading from '../../components/Loading';
 
 const ProductModal = ({onClose, onSave}) => {
+  const [productId, setProductId] = useRecoilState(productIdState);
   const [productName, setProductName] = useRecoilState(productNameState);
   const [price, setPrice] = useRecoilState(priceState);
   const [team, setTeam] = useRecoilState(teamState);
@@ -57,7 +60,9 @@ const ProductModal = ({onClose, onSave}) => {
 
       const imageUrl = await getDownloadURL(storageRef);
       const collectionRef = collection(db, 'products');
+      const newProductId = uuidv4();
       const newProduct = {
+        productId: newProductId,
         imgUrl: imageUrl,
         productName,
         price,
@@ -148,7 +153,9 @@ const ProductModal = ({onClose, onSave}) => {
     try {
       setLoading(true);
       await addNewProduct();
-      [setProductName, setPrice, setTeam, setIsLatest, setCategory, setLike].forEach(setState => setState(''));
+      [setProductId, setProductName, setPrice, setTeam, setIsLatest, setCategory, setLike].forEach(setState =>
+        setState(''),
+      );
       setImageFile(null);
       setImagePreview(null);
     } catch (error) {
