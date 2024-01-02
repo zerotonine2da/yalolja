@@ -7,22 +7,22 @@ import ProductList from '../components/ProductList';
 
 function Main() {
   return (
-    <MainContainer>
+    <ScMainContainer>
       <Header />
-      <ContentContainer>
+      <ScContentContainer>
         <TeamLogos />
-      </ContentContainer>
+      </ScContentContainer>
       <ProductList />
       <Footer />
-    </MainContainer>
+    </ScMainContainer>
   );
 }
-const MainContainer = styled.div`
+const ScMainContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const ContentContainer = styled.div`
+const ScContentContainer = styled.div`
   flex: 1;
   background-color: #f0f0f0;
 `;

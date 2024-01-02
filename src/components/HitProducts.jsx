@@ -3,10 +3,13 @@ import {useQuery} from 'react-query';
 import {getHitProducts} from '../api/api';
 import styled from 'styled-components';
 import LikeFunc from './like/LikeFunc';
+import {useRecoilValue} from 'recoil';
+import {truncatedTextState} from '../shared/recoil';
 
 const HitProducts = ({page}) => {
   const {data: products, isLoading, isError} = useQuery('products', getHitProducts);
-
+  const truncatedText = useRecoilValue(truncatedTextState);
+  console.log(truncatedText);
   if (isLoading) return <div>로딩 중</div>;
   if (isError) return <div>에러 발생</div>;
 
@@ -22,7 +25,7 @@ const HitProducts = ({page}) => {
         <ScProducts>
           {productsToDisplay.map(product => (
             <ScProduct key={product.id}>
-              <ScProductName>{product.productName}</ScProductName>
+              <ScProductName value={truncatedText}>{product.productName}1234123</ScProductName>
               <ImgContainer>
                 <Img src={product.imgUrl} alt="image" />
               </ImgContainer>
