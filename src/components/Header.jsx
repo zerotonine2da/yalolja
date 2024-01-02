@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from '../components/NavBar';
 import styled from 'styled-components';
 import SlideBanner from './banner/SlideBanner';
 

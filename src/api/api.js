@@ -4,7 +4,6 @@ import {
   doc,
   getDocs,
   increment,
-  updateDoc,
   arrayUnion,
   arrayRemove,
   getDoc,
@@ -70,7 +69,6 @@ export const getHitProducts = async () => {
 
 export const addLikeProduct = async (userId, productId) => {
   const productDocRef = doc(db, 'products', productId);
-  console.log(userId);
   const batch = writeBatch(db);
 
   try {
@@ -98,7 +96,7 @@ export const addLikeProduct = async (userId, productId) => {
     }
 
     await batch.commit();
-    console.log('좋아요 토글이 성공적으로 처리완.');
+    //console.log('좋아요 토글이 성공적으로 처리완.');
   } catch (error) {
     console.error('좋아요 토글 중 오류가 발생.', error);
   }

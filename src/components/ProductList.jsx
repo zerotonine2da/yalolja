@@ -6,7 +6,7 @@ import ProductModal from './UI/ProductModal';
 import 'firebase/firestore';
 import {useQuery} from 'react-query';
 import {getLatestProducts} from '../api/api';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import {adminState} from '../recoil/AuthAtom';
 import Pagination from './UI/Pagination';
 
@@ -15,14 +15,14 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const isAdmin = useRecoilValue(adminState);
   const {data: products, isLoading, isError} = useQuery('products', getLatestProducts);
-
-  console.log('isAdmin', isAdmin);
+  /*
   console.log('Rendering ProductList component. State and props:', {
     isModalOpen,
     isLoading,
     isError,
     products,
   });
+  */
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>에러 발생</div>;

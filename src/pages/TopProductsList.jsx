@@ -12,13 +12,13 @@ const TopProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const {data: products, isLoading, isError} = useQuery('products', getTopProducts);
-
+  /*
   console.log('Rendering ProductList component. State and props:', {
     isLoading,
     isError,
     products,
   });
-
+*/
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>에러 발생</div>;
 

@@ -9,7 +9,7 @@ import {truncatedTextState} from '../shared/recoil';
 const HitProducts = ({page}) => {
   const {data: products, isLoading, isError} = useQuery('products', getHitProducts);
   const truncatedText = useRecoilValue(truncatedTextState);
-  console.log(truncatedText);
+
   if (isLoading) return <div>로딩 중</div>;
   if (isError) return <div>에러 발생</div>;
 

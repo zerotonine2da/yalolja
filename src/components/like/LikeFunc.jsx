@@ -1,21 +1,14 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useMutation, useQueryClient} from 'react-query';
 import styled, {keyframes} from 'styled-components';
-import {getProducts, addLikeProduct} from '../../api/api';
-import {atom, useRecoilState, useRecoilValue} from 'recoil';
+import {addLikeProduct} from '../../api/api';
+import {useRecoilValue} from 'recoil';
 import {loginState} from '../../recoil/AuthAtom';
 import Swal from 'sweetalert2';
-import {auth} from '../../shared/firebase';
-
-const likeState = atom({
-  key: 'likeState',
-  default: false,
-});
 
 const LikeFunc = ({productId, initialLikeCount}) => {
   const queryClient = useQueryClient();
   const isLoggedin = useRecoilValue(loginState);
-  const [isLinked, setIsLinked] = useRecoilState(likeState);
 
   const {mutate} = useMutation(() => addLikeProduct(isLoggedin, productId), {
     onMutate: async () => {

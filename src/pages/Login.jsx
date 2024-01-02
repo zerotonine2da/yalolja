@@ -45,7 +45,6 @@ function Login() {
     } catch (error) {
       const errorCode = error.code;
       //const errorMessage = error.message;
-      //console.log(errorCode);
       Swal.fire({
         icon: 'error',
         title: '로그인 실패',
@@ -73,10 +72,8 @@ function Login() {
       navigate('/');
     } catch (error) {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-      console.log(errorCode);
-      console.log(errorMessage);
+      // const errorMessage = error.message;
+
       Swal.fire({
         icon: 'error',
         title: '로그인 실패',
