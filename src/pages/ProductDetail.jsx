@@ -1,19 +1,47 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {getDoc, doc} from 'firebase/firestore';
-import {db} from '../shared/firebase';
-import {productNameState, priceState, likeState, imgUploadState} from '../recoil/productModal';
+import {
+  getDoc,
+  doc,
+  addDoc,
+  collection,
+  serverTimestamp,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  deleteDoc,
+} from 'firebase/firestore';
+import {db, auth} from '../shared/firebase';
+import {productNameState, priceState, likesState, imgUploadState} from '../recoil/productModal';
 import {useRecoilState} from 'recoil';
 import styled from 'styled-components';
 import LikeFunc from '../components/like/LikeFunc';
+import {onAuthStateChanged} from 'firebase/auth';
+import {addComments} from '../api/api';
 
 const ProductDetail = () => {
   const {productId} = useParams();
   const [productDetail, setProductDetail] = useState(null);
   const [productName, setProductName] = useRecoilState(productNameState);
   const [price, setPrice] = useRecoilState(priceState);
-  const [like, setLike] = useRecoilState(likeState);
+  const [like, setLike] = useRecoilState(likesState);
   const [imgUrl, setImgUrl] = useRecoilState(imgUploadState);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    console.log('comments', comments);
+  }, [comments]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -34,13 +62,24 @@ const ProductDetail = () => {
         console.error('Error fetching product details', error);
       }
     };
-
     fetchProductDetail();
   }, [productId, setProductName, setPrice, setImgUrl, setLike]);
 
   if (!productDetail) {
     return <div>Loading...</div>;
   }
+
+  const handleCommentSubmit = async () => {
+    if (!newComment.trim()) {
+      return;
+    }
+    try {
+      await addComments(user.uid, productId, newComment);
+      setNewComment('');
+    } catch (error) {
+      console.error('Error adding comment', error);
+    }
+  };
 
   return (
     <>
@@ -50,26 +89,41 @@ const ProductDetail = () => {
         </ImgWrapper>
         <ProductContextWrapper>
           <ProductName>{productName}</ProductName>
-          <p>{price} 원</p>
+          <ProductPrice>{price}원</ProductPrice>
           <LikeFunc productId={productId} initialLikeCount={like} />
         </ProductContextWrapper>
       </DetailProductWrapper>
-      <CommentSection>코멘트 칸</CommentSection>
+      <CommentSection>
+        <h3>Comments</h3>
+        <CommentInput>
+          <textarea
+            rows="3"
+            placeholder="후기를 적어주세요."
+            value={newComment}
+            onChange={e => setNewComment(e.target.value)}
+          />
+          <button onClick={handleCommentSubmit}>Submit</button>
+        </CommentInput>
+      </CommentSection>
     </>
   );
 };
 
 const DetailProductWrapper = styled.div`
+  width: 100%;
   height: 45%;
   display: flex;
-
+  justify-content: center;
   padding: 10px;
+  gap: 50px;
+  margin-top: 30px;
 `;
 
 const ImgWrapper = styled.div`
-  width: 100%;
+  width: 40%;
   display: flex;
   justify-content: center;
+  border: 1px solid #ccc;
 `;
 
 const ProductContextWrapper = styled.div`
@@ -81,8 +135,55 @@ const ProductContextWrapper = styled.div`
   border: 1px solid #ccc;
 `;
 
-const ProductName = styled.h2``;
+const ProductName = styled.h2`
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+`;
 
-const CommentSection = styled.div``;
+const ProductPrice = styled.h3`
+  font-size: 24px;
+  font-weight: 600;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  padding: 10px;
+
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+`;
+
+const CommentSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const CommentList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const Comment = styled.li`
+  margin-bottom: 8px;
+`;
+
+const CommentInput = styled.div`
+  margin-top: 10px;
+
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+`;
+
+const DeleteButton = styled.button`
+  margin-left: 10px;
+  color: red;
+  cursor: pointer;
+`;
 
 export default ProductDetail;

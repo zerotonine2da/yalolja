@@ -43,7 +43,7 @@ const ProductList = () => {
     <ScProductWrapper>
       {isAdmin ? (
         <>
-          <Button onClick={handleAddProduct} />
+          <Button onClick={handleAddProduct} text="상품 등록" />
           {isModalOpen && <ProductModal onClose={handleCloseModal} />}
         </>
       ) : null}
