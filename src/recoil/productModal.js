@@ -1,5 +1,10 @@
 import {atom} from 'recoil';
 
+const productIdState = atom({
+  key: 'productIdState',
+  default: '',
+});
+
 const productNameState = atom({
   key: 'productNameState',
   default: '',
@@ -38,4 +43,13 @@ const imgUploadState = atom({
   },
 });
 
-export {productNameState, priceState, teamState, isLatestState, imgUploadState, categoryState, likeState};
+export {
+  productIdState,
+  productNameState,
+  priceState,
+  teamState,
+  isLatestState,
+  imgUploadState,
+  categoryState,
+  likeState,
+};
