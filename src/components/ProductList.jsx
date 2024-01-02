@@ -8,6 +8,7 @@ import {useQuery} from 'react-query';
 import {getLatestProducts} from '../api/api';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {adminState} from '../recoil/AuthAtom';
+import Pagination from './UI/Pagination';
 
 const ProductList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,8 +26,6 @@ const ProductList = () => {
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>에러 발생</div>;
-
-  const totalPage = Math.ceil(products.length / 5);
 
   const handleAddProduct = () => {
     setIsModalOpen(true);
@@ -53,27 +52,18 @@ const ProductList = () => {
       {isModalOpen && <ProductModal onClose={handleCloseModal} />}
      */}
       <Product page={currentPage} />
-      <Pagination>
-        <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
-          이전
-        </button>
-        <span>{`${currentPage} / ${totalPage}`}</span>
-        <button disabled={currentPage === totalPage} onClick={() => handlePageChange(currentPage + 1)}>
-          다음
-        </button>
-      </Pagination>
+      <Pagination
+        currentPage={currentPage}
+        itemsPerPage={5}
+        totalItems={products.length}
+        onPageChange={handlePageChange}
+      />
     </ScProductWrapper>
   );
 };
 
 const ScProductWrapper = styled.div`
   padding: 10px;
-`;
-
-const Pagination = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
 `;
 
 export default ProductList;

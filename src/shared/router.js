@@ -9,6 +9,7 @@ import TopProductsList from '../pages/TopProductsList';
 import AccProductsList from '../pages/AccProductsList';
 import BottomProductsList from '../pages/BottomProductsList';
 import HitProductsList from '../pages/HitProductsList';
+import ProductDetail from '../pages/ProductDetail';
 
 function Router() {
   return (
@@ -22,6 +23,7 @@ function Router() {
           <Route path="/acc" element={<AccProductsList />} />
           <Route path="/bottom" element={<BottomProductsList />} />
           <Route path="/hit" element={<HitProductsList />} />
+          <Route path="/product/:productId" element={<ProductDetail />} />
         </Route>
 
         <Route path="/login" element={<Login />} />
