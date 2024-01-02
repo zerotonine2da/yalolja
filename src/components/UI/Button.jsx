@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = ({onClick}) => {
-  return <UiButton onClick={onClick}>등록</UiButton>;
+const Button = ({onClick, text}) => {
+  return <UiButton onClick={onClick}>{text}</UiButton>;
 };
 
 const UiButton = styled.button`

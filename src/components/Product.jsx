@@ -3,8 +3,10 @@ import {useQuery} from 'react-query';
 import {getLatestProducts} from '../api/api';
 import styled from 'styled-components';
 import LikeFunc from './like/LikeFunc';
+import {useNavigate} from 'react-router-dom';
 
 const Product = ({page}) => {
+  const navigate = useNavigate();
   const {data: products, isLoading, isError} = useQuery('products', getLatestProducts);
 
   if (isLoading) return <div>로딩 중</div>;
@@ -16,12 +18,16 @@ const Product = ({page}) => {
 
   const productsToDisplay = products.slice(startIndex, endIndex);
 
+  const handleProductClick = productId => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <>
       <ScProductContainer>
         <ScProducts>
           {productsToDisplay.map(product => (
-            <ScProduct key={product.id}>
+            <ScProduct key={product.id} onClick={() => handleProductClick(product.id)}>
               <ScProductName>{product.productName}</ScProductName>
               <ImgContainer>
                 <Img src={product.imgUrl} alt="image" />

@@ -9,8 +9,7 @@ import {
   categoryState,
 } from '../../recoil/productModal';
 import {useRecoilState} from 'recoil';
-
-import {addDoc, collection} from 'firebase/firestore';
+import {addDoc, collection, serverTimestamp} from 'firebase/firestore';
 import {db, storage} from '../../shared/firebase';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 
@@ -26,6 +25,7 @@ const ProductModal = ({onClose, onSave}) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const isMountedRef = useRef(true);
 
   const handleImgUpload = e => {
@@ -48,6 +48,8 @@ const ProductModal = ({onClose, onSave}) => {
 
   const addNewProduct = async () => {
     try {
+      setLoading(true);
+
       const storageRef = ref(storage, `images/${imageFile.name}`);
       await uploadBytes(storageRef, imageFile);
 
@@ -61,12 +63,25 @@ const ProductModal = ({onClose, onSave}) => {
         team,
         like,
         category,
+        createdAt: serverTimestamp(),
       };
 
       await addDoc(collectionRef, newProduct);
       console.log('Product added to Firebase:', newProduct);
     } catch (error) {
       console.error('에러', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Server Error',
+        text: '상품 등록 중 에러가 발생했습니다. 다시 시도해주세요.',
+      });
+    } finally {
+      setLoading(false);
+      Swal.fire({
+        icon: 'success',
+        title: '완료',
+        text: '상품을 등록했습니다.',
+      });
     }
   };
 
@@ -88,20 +103,28 @@ const ProductModal = ({onClose, onSave}) => {
   const handleUploadButton = async e => {
     e.preventDefault();
 
-    if (!productName || !price || !team || !category || !like || !imageFile) {
+    if (!productName || !price || !team || !category || !imageFile) {
       Swal.fire({
         icon: 'error',
         title: '입력값이 없습니다.',
         text: '요구하는 값을 입력해주세요.',
       });
+      return;
     }
 
-    console.log(handleUploadButton);
-    await addNewProduct();
-    [setProductName, setPrice, setTeam, setIsLatest, setCategory, setLike].forEach(setState => setState(''));
-    setImageFile(null);
-    setImagePreview(null);
-    handleCloseModal();
+    try {
+      setLoading(true);
+
+      await addNewProduct();
+      [setProductName, setPrice, setTeam, setIsLatest, setCategory, setLike].forEach(setState => setState(''));
+      setImageFile(null);
+      setImagePreview(null);
+    } catch (error) {
+      console.error('에러가 발생했습니다', error.message);
+    } finally {
+      setLoading(false);
+      handleCloseModal();
+    }
   };
 
   return (
@@ -125,7 +148,6 @@ const ProductModal = ({onClose, onSave}) => {
           <ModalInput type="text" value={price} onChange={e => setPrice(e.target.value)} placeholder="가격" />
           <ModalInput type="text" value={team} onChange={e => setTeam(e.target.value)} placeholder="팀명" />
           <ModalInput type="text" value={category} onChange={e => setCategory(e.target.value)} placeholder="카테고리" />
-          <ModalInput type="number" value={like} onChange={e => setLike(e.target.value)} placeholder="좋아요" />
           <ModalInput type="checkbox" checked={isLatest} onChange={handleIsLatestChange} />
         </ModalContext>
         <ButtonContainer>

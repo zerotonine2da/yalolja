@@ -4,6 +4,7 @@ import 'firebase/firestore';
 import {useQuery} from 'react-query';
 import {getTopProducts} from '../api/api';
 import TopProducts from '../components/TopProducts';
+import Pagination from '../components/UI/Pagination';
 
 const TopProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,8 +20,6 @@ const TopProductsList = () => {
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>에러 발생</div>;
 
-  const totalPage = Math.ceil(products.length / 5);
-
   const handlePageChange = newPage => {
     setCurrentPage(newPage);
   };
@@ -28,27 +27,18 @@ const TopProductsList = () => {
   return (
     <ScProductWrapper>
       <TopProducts page={currentPage} />
-      <Pagination>
-        <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
-          이전
-        </button>
-        <span>{`${currentPage} / ${totalPage}`}</span>
-        <button disabled={currentPage === totalPage} onClick={() => handlePageChange(currentPage + 1)}>
-          다음
-        </button>
-      </Pagination>
+      <Pagination
+        currentPage={currentPage}
+        itemsPerPage={5}
+        totalItems={products.length}
+        onPageChange={handlePageChange}
+      />
     </ScProductWrapper>
   );
 };
 
 const ScProductWrapper = styled.div`
   padding: 10px;
-`;
-
-const Pagination = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
 `;
 
 export default TopProductsList;
