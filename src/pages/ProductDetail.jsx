@@ -49,7 +49,7 @@ const ProductDetail = () => {
           <img src={imgUrl} alt="Product Img" />
         </ImgWrapper>
         <ProductContextWrapper>
-          <h2>{productName}</h2>
+          <ProductName>{productName}</ProductName>
           <p>{price} 원</p>
           <LikeFunc productId={productId} initialLikeCount={like} />
         </ProductContextWrapper>
@@ -80,6 +80,8 @@ const ProductContextWrapper = styled.div`
   padding: 10px;
   border: 1px solid #ccc;
 `;
+
+const ProductName = styled.h2``;
 
 const CommentSection = styled.div``;
 
