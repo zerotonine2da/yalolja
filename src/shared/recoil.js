@@ -8,3 +8,8 @@ export const likeState = atom({
 export const useLikeState = () => {
   return useRecoilState(likeState);
 };
+
+export const modalState = atom({
+  key: 'modalState',
+  default: false,
+});
