@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useQuery} from 'react-query';
 import {getProducts} from '../api/api';
 import styled from 'styled-components';
 import LikeFunc from './like/LikeFunc';
 import {useRecoilState} from 'recoil';
 import {loginState} from '../recoil/AuthAtom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faHeart} from '@fortawesome/free-solid-svg-icons';
 
 const LikeProduct = () => {
   const [login, setLogin] = useRecoilState(loginState);
@@ -14,17 +16,21 @@ const LikeProduct = () => {
   if (isError || !products) return <div>에러 발생</div>;
   //로그인 유저
   const userEmail = login.email;
-  // console.log('userEmail', userEmail);
-  //console.log('products', products);
   //좋아요 누른 상품만 필터링
   const likedProduct = products.filter(product => {
     return product.likes && product.likes.some(like => like.email == userEmail);
   });
 
-  //console.log('likedProduct', likedProduct);
+  const likedProductCnt = likedProduct.length;
 
   return (
     <>
+      <div>
+        <FontAwesomeIcon icon={faHeart} />
+        <p>LIKELIST</p>
+        <p>({likedProductCnt})</p>
+      </div>
+      <StDivborderLine></StDivborderLine>
       <ScProductContainer>
         {likedProduct.length === 0 ? (
           <ScPNoList>관심상품 내역이 없습니다.</ScPNoList>
@@ -87,7 +93,7 @@ const ScProductName = styled.div`
   justify-content: center;
 `;
 
-const ScProductContext = styled.p`
+const ScProductContext = styled.div`
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -109,6 +115,10 @@ const ImgContainer = styled.div`
 const Img = styled.img`
   width: 80%;
   border-bottom: 1px solid #ccc;
+`;
+
+const StDivborderLine = styled.div`
+  border-bottom: 1px solid #333;
 `;
 
 export default LikeProduct;
