@@ -7,6 +7,7 @@ import HitProducts from '../components/HitProducts';
 import Pagination from '../components/UI/Pagination';
 import Header from '../components/Header';
 import TeamLogos from '../components/TeamLogos';
+import Footer from '../components/Footer';
 
 const HitProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,8 +30,11 @@ const HitProductsList = () => {
   return (
     <>
       <Header />
-      <TeamLogos />
+      <Sclogo>
+        <TeamLogos />
+      </Sclogo>
       <ScProductWrapper>
+        <ScHitList>HIT List</ScHitList>
         <HitProducts page={currentPage} />
         <Pagination
           currentPage={currentPage}
@@ -39,12 +43,26 @@ const HitProductsList = () => {
           onPageChange={handlePageChange}
         />
       </ScProductWrapper>
+      <Footer />
     </>
   );
 };
 
 const ScProductWrapper = styled.div`
   padding: 10px;
+  background-color: #f0f0f0;
 `;
-
+const Sclogo = styled.div`
+  padding: 10px;
+  background-color: #f0f0f0;
+`;
+const ScHitList = styled.h1`
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+`;
 export default HitProductsList;

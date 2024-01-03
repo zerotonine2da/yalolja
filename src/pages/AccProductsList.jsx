@@ -7,6 +7,7 @@ import AccProducts from '../components/AccProducts';
 import Pagination from '../components/UI/Pagination';
 import Header from '../components/Header';
 import TeamLogos from '../components/TeamLogos';
+import Footer from '../components/Footer';
 
 const AccProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,8 +32,11 @@ const AccProductsList = () => {
   return (
     <>
       <Header />
-      <TeamLogos />
+      <Sclogo>
+        <TeamLogos />
+      </Sclogo>
       <ScProductWrapper>
+        <ScAccessories>ACCESSSORIES List</ScAccessories>
         <AccProducts page={currentPage} />
         <Pagination
           currentPage={currentPage}
@@ -41,12 +45,27 @@ const AccProductsList = () => {
           onPageChange={handlePageChange}
         />
       </ScProductWrapper>
+      <Footer />
     </>
   );
 };
 
 const ScProductWrapper = styled.div`
   padding: 10px;
+  background-color: #f0f0f0;
 `;
+const Sclogo = styled.div`
+  padding: 10px;
+  background-color: #f0f0f0;
+`;
+const ScAccessories = styled.h1`
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
 
+  padding-bottom: 10px;
+`;
 export default AccProductsList;

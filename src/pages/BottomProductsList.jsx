@@ -7,6 +7,7 @@ import BottomProducts from '../components/BottomProducts';
 import Pagination from '../components/UI/Pagination';
 import TeamLogos from '../components/TeamLogos';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const BottomProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,8 +30,11 @@ const BottomProductsList = () => {
   return (
     <>
       <Header />
-      <TeamLogos />
+      <Sclogo>
+        <TeamLogos />
+      </Sclogo>
       <ScProductWrapper>
+        <ScBottomList>BOTTOM List</ScBottomList>
         <BottomProducts page={currentPage} />
         <Pagination
           currentPage={currentPage}
@@ -39,12 +43,26 @@ const BottomProductsList = () => {
           onPageChange={handlePageChange}
         />
       </ScProductWrapper>
+      <Footer />
     </>
   );
 };
 
 const ScProductWrapper = styled.div`
   padding: 10px;
+  background-color: #f0f0f0;
 `;
-
+const Sclogo = styled.div`
+  padding: 10px;
+  background-color: #f0f0f0;
+`;
+const ScBottomList = styled.h1`
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+`;
 export default BottomProductsList;
