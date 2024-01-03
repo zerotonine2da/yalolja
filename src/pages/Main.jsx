@@ -20,6 +20,7 @@ function Main() {
 const ScMainContainer = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: #f0f0f0;
 `;
 
 const ScContentContainer = styled.div`
