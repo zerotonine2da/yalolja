@@ -97,6 +97,7 @@ const ImgContainer = styled.div`
   justify-content: center;
   margin-bottom: 10px;
 `;
+
 const Img = styled.img`
   margin-top: 5px;
   width: 80%;
