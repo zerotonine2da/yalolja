@@ -7,6 +7,7 @@ import TopProducts from '../components/TopProducts';
 import Pagination from '../components/UI/Pagination';
 import Header from '../components/Header';
 import TeamLogos from '../components/TeamLogos';
+import Footer from '../components/Footer';
 
 const TopProductsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,8 +30,12 @@ const TopProductsList = () => {
   return (
     <>
       <Header />
-      <TeamLogos />
+      <Sclogo>
+        <TeamLogos />
+      </Sclogo>
+
       <ScProductWrapper>
+        <ScTopList>TOP List</ScTopList>
         <TopProducts page={currentPage} />
         <Pagination
           currentPage={currentPage}
@@ -39,12 +44,26 @@ const TopProductsList = () => {
           onPageChange={handlePageChange}
         />
       </ScProductWrapper>
+      <Footer />
     </>
   );
 };
 
 const ScProductWrapper = styled.div`
   padding: 10px;
+  background-color: #f0f0f0;
 `;
-
+const Sclogo = styled.div`
+  padding: 10px;
+  background-color: #f0f0f0;
+`;
+const ScTopList = styled.h1`
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+`;
 export default TopProductsList;
