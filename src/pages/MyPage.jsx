@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import {adminState, googleLogin, loginState} from '../recoil/AuthAtom';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -14,9 +14,10 @@ import ProductModal from '../components/UI/ProductModal';
 
 function MyPage() {
   //리코일
-  const [login, setLogin] = useRecoilState(loginState);
-  const [isAdmin, setIsAdmin] = useRecoilState(adminState);
+
   const googleLoginCheck = useRecoilValue(googleLogin);
+  const login = useRecoilValue(loginState);
+  const isAdmin = useRecoilValue(adminState);
   const navigate = useNavigate();
 
   const [user, setUser] = useState(login);

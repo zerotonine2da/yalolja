@@ -1,4 +1,4 @@
-import {atom, selector, useRecoilState} from 'recoil';
+import {atom, useRecoilState} from 'recoil';
 
 export const likeState = atom({
   key: 'likeState',

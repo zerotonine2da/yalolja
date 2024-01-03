@@ -11,7 +11,8 @@ import {
   where,
   writeBatch,
   orderBy,
-  Timestamp,
+  //Timestamp,
+  updateDoc,
 } from 'firebase/firestore';
 import {v4 as uuidv4} from 'uuid';
 
@@ -71,7 +72,7 @@ export const getHitProducts = async () => {
 
 export const addComments = async (userId, productId, comment) => {
   const productRef = doc(db, 'products', productId);
-  console.log(userId);
+  ///console.log(userId);
   try {
     const productSnap = await getDoc(productRef);
     if (productSnap.exists()) {
