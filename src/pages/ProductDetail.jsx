@@ -1,17 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {
-  getDoc,
-  doc,
-  addDoc,
-  collection,
-  serverTimestamp,
-  query,
-  where,
-  orderBy,
-  getDocs,
-  deleteDoc,
-} from 'firebase/firestore';
+import {getDoc, doc} from 'firebase/firestore';
 import {db, auth} from '../shared/firebase';
 import {productNameState, priceState, likesState, imgUploadState} from '../recoil/productModal';
 import {useRecoilState} from 'recoil';
