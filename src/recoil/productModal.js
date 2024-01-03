@@ -30,8 +30,8 @@ const isLatestState = atom({
   default: false,
 });
 
-const likeState = atom({
-  key: 'likeState',
+const likesState = atom({
+  key: 'likesState',
   default: 0,
 });
 
@@ -51,5 +51,5 @@ export {
   isLatestState,
   imgUploadState,
   categoryState,
-  likeState,
+  likesState,
 };

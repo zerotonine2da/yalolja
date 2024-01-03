@@ -12,7 +12,9 @@ import {
   where,
   writeBatch,
   orderBy,
+  Timestamp,
 } from 'firebase/firestore';
+import {v4 as uuidv4} from 'uuid';
 
 export const getProducts = async () => {
   const q = query(collection(db, 'products'));
@@ -66,6 +68,29 @@ export const getHitProducts = async () => {
     id: doc.id,
     ...doc.data(),
   }));
+};
+
+export const addComments = async (userId, productId, comment) => {
+  const productRef = doc(db, 'products', productId);
+  console.log(userId);
+  try {
+    const productSnap = await getDoc(productRef);
+    if (productSnap.exists()) {
+      await updateDoc(productRef, {
+        comments: arrayUnion({
+          commentId: uuidv4(),
+          userId,
+          comment,
+          createdAt: new Date(),
+        }),
+      });
+      console.log('성공적으로 추가되었습니다.');
+    } else {
+      console.error('제품을 찾지 못했습니다.');
+    }
+  } catch (error) {
+    console.error('댓글 달기에 실패했습니다.', error);
+  }
 };
 
 export const addLikeProduct = async (userId, productId) => {

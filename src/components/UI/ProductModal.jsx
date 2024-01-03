@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
   productNameState,
   priceState,
-  likeState,
+  likesState,
   teamState,
   isLatestState,
   categoryState,
@@ -27,7 +27,7 @@ const ProductModal = ({onClose, onSave}) => {
   const [team, setTeam] = useRecoilState(teamState);
   const [isLatest, setIsLatest] = useRecoilState(isLatestState);
   const [category, setCategory] = useRecoilState(categoryState);
-  const [like, setLike] = useRecoilState(likeState);
+  const [like, setLike] = useRecoilState(likesState);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
