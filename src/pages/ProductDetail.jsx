@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import LikeFunc from '../components/like/LikeFunc';
 import {onAuthStateChanged} from 'firebase/auth';
 import {addComments} from '../api/api';
+import Button from '../components/UI/Button';
 
 const ProductDetail = () => {
   const {productId} = useParams();
@@ -82,18 +83,6 @@ const ProductDetail = () => {
           <LikeFunc productId={productId} initialLikeCount={like} />
         </ProductContextWrapper>
       </DetailProductWrapper>
-      <CommentSection>
-        <h3>Comments</h3>
-        <CommentInput>
-          <textarea
-            rows="3"
-            placeholder="후기를 적어주세요."
-            value={newComment}
-            onChange={e => setNewComment(e.target.value)}
-          />
-          <button onClick={handleCommentSubmit}>Submit</button>
-        </CommentInput>
-      </CommentSection>
     </>
   );
 };
@@ -141,38 +130,6 @@ const ProductPrice = styled.h3`
 
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-`;
-
-const CommentSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-`;
-
-const CommentList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const Comment = styled.li`
-  margin-bottom: 8px;
-`;
-
-const CommentInput = styled.div`
-  margin-top: 10px;
-
-  textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 8px;
-  }
-`;
-
-const DeleteButton = styled.button`
-  margin-left: 10px;
-  color: red;
-  cursor: pointer;
 `;
 
 export default ProductDetail;
