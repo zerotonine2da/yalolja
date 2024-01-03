@@ -15,14 +15,16 @@ const TopProducts = ({page}) => {
   const endIndex = startIndex + productsPerPage;
 
   const productsToDisplay = products.slice(startIndex, endIndex);
-
+  const truncate = (str, n) => {
+    return str?.length > n ? str.substr(0, n - 1) + '...' : str;
+  };
   return (
     <>
       <ScProductContainer>
         <ScProducts>
           {productsToDisplay.map(product => (
             <ScProduct key={product.id}>
-              <ScProductName>{product.productName}</ScProductName>
+              <ScProductName>{truncate(product.productName, 20)}</ScProductName>
               <ImgContainer>
                 <Img src={product.imgUrl} alt="image" />
               </ImgContainer>
@@ -49,7 +51,6 @@ const ScProductContainer = styled.div`
 const ScProducts = styled.ul`
   list-style: none;
   display: flex;
-
   justify-content: flex-start;
 `;
 

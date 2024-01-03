@@ -29,7 +29,7 @@ const Product = ({page}) => {
 
   return (
     <>
-      <h1>인기 많은 제품들</h1>
+      <ScBestProduct>BEST PRODUCT</ScBestProduct>
       <ScProductContainer>
         <ScProducts>
           {productsToDisplay.map(product => (
@@ -55,8 +55,6 @@ const ScProductContainer = styled.div`
   width: 100%;
   display: flex;
   padding: 10px;
-  border: 1px solid black;
-  border-radius: 5px;
 `;
 
 const ScProducts = styled.ul`
@@ -109,4 +107,14 @@ const LatestCheck = styled.p`
   padding: 5px;
 `;
 
+const ScBestProduct = styled.h1`
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+
+  padding-bottom: 10px;
+`;
 export default Product;
