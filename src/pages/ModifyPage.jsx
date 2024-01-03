@@ -270,8 +270,4 @@ const StDivDelete = styled.div`
   }
 `;
 
-const StSpanAlertMSG = styled.span`
-  font-size: 10px;
-`;
-
 export default ModifyPage;

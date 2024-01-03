@@ -7,8 +7,7 @@ import {useRecoilState} from 'recoil';
 import styled from 'styled-components';
 import LikeFunc from '../components/like/LikeFunc';
 import {onAuthStateChanged} from 'firebase/auth';
-import {addComments} from '../api/api';
-import Button from '../components/UI/Button';
+//import {addComments} from '../api/api';
 
 const ProductDetail = () => {
   const {productId} = useParams();
@@ -17,13 +16,8 @@ const ProductDetail = () => {
   const [price, setPrice] = useRecoilState(priceState);
   const [like, setLike] = useRecoilState(likesState);
   const [imgUrl, setImgUrl] = useRecoilState(imgUploadState);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  //const [newComment, setNewComment] = useState('');
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    console.log('comments', comments);
-  }, [comments]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
@@ -59,6 +53,7 @@ const ProductDetail = () => {
     return <div>Loading...</div>;
   }
 
+  /*
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) {
       return;
@@ -70,7 +65,7 @@ const ProductDetail = () => {
       console.error('Error adding comment', error);
     }
   };
-
+*/
   return (
     <>
       <DetailProductWrapper>
