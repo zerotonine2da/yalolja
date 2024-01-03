@@ -96,11 +96,8 @@ const Join = () => {
 
       <StFormData
         onSubmit={handleSubmit(data => {
-          //event.preventDefault()-//;
-          console.log('가입하기 버튼 클릭시 : ', data);
           // 유효성 검사를 다시 수행하도록 clearErrors를 호출합니다.
           clearErrors();
-
           signUp(data);
         })}
       >

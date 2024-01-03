@@ -7,7 +7,6 @@ import Lck1 from '../../assets/imgs/banners/Lck1.jpg';
 import Lck2 from '../../assets/imgs/banners/Lck2.jpg';
 import Lck3 from '../../assets/imgs/banners/Lck3.webp';
 import Lck4 from '../../assets/imgs/banners/Lck4.jpg';
-import ReactModal from 'react-modal';
 import {useRecoilState} from 'recoil';
 import {modalState} from '../../shared/recoil';
 const SlideBanner = () => {

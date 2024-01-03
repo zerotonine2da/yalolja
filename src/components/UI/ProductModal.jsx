@@ -12,7 +12,7 @@ import {
 import {useRecoilState} from 'recoil';
 import {v4 as uuidv4} from 'uuid';
 
-import {addDoc, collection, getDocs, query, serverTimestamp, writeBatch} from 'firebase/firestore';
+import {addDoc, collection, serverTimestamp} from 'firebase/firestore';
 import {db, storage} from '../../shared/firebase';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 import {faImage} from '@fortawesome/free-solid-svg-icons';
@@ -48,10 +48,6 @@ const ProductModal = ({onClose, onSave}) => {
     }
   };
 
-  const handleIsLatestChange = e => {
-    setIsLatest(e.target.checked);
-  };
-
   const addNewProduct = async () => {
     try {
       setLoading(true);
@@ -74,9 +70,8 @@ const ProductModal = ({onClose, onSave}) => {
       };
 
       await addDoc(collectionRef, newProduct);
-      console.log('Product added to Firebase:', newProduct);
+      //console.log('Product added to Firebase:', newProduct);
     } catch (error) {
-      console.error('에러', error);
       Swal.fire({
         icon: 'error',
         title: 'Server Error',
@@ -379,7 +374,9 @@ const ScDivContentLayout = styled.div`
   }
 `;
 
-const ModalInput = styled.input``;
+const ModalInput = styled.input`
+  padding: 5px;
+`;
 
 const ButtonContainer = styled.div`
   padding-top: 50px;

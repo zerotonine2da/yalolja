@@ -4,15 +4,13 @@ import styled from 'styled-components';
 const Footer = () => {
   return (
     <ScFooter>
-      <ScColumn>
-        <div>팀장: 김혜민</div>
-        <div>조원: 김동학</div>
-      </ScColumn>
-      <ScColumn>
-        <div>조원: 권영준</div>
-        <div>조원: 윤유빈</div>
-      </ScColumn>
       <div>&copy; 2024 야롤자 주식회사</div>
+      <ScColumn>
+        <div>김혜민</div>
+        <div>김동학</div>
+        <div>권영준</div>
+        <div>윤유빈</div>
+      </ScColumn>
     </ScFooter>
   );
 };
@@ -23,7 +21,8 @@ const ScFooter = styled.div`
   padding: 20px;
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
 
@@ -44,6 +43,7 @@ const ScColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 12px;
 `;
 
 export default Footer;

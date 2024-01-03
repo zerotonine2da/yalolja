@@ -18,7 +18,7 @@ const LikeProduct = () => {
   const userEmail = login.email;
   //좋아요 누른 상품만 필터링
   const likedProduct = products.filter(product => {
-    return product.likes && product.likes.some(like => like.email == userEmail);
+    return product.likes && product.likes.some(like => like.email === userEmail);
   });
 
   const likedProductCnt = likedProduct.length;
