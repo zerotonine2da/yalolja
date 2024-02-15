@@ -108,7 +108,7 @@ function Login() {
 
         <label>
           <p>PW </p>
-          <input type="password" placeholder="비밀번호 입력" value={pw} onChange={e => setPw(e.target.value)}></input>
+          <input type="password"  autoComplete="on" placeholder="비밀번호 입력" value={pw} onChange={e => setPw(e.target.value)}></input>
         </label>
 
         <button onClick={Login}>로그인</button>
