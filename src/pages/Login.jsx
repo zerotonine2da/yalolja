@@ -52,6 +52,10 @@ function Login() {
       });
       setloading(false);
     }
+     finally {
+      setId('');
+      setPw('');
+    }
   };
 
   const LoginGoogle = async e => {
