@@ -130,6 +130,7 @@ const Join = () => {
               })}
               type="password"
               placeholder="비밀번호*"
+              autoComplete="on"
             ></input>
             <p>{errors.password?.message}</p>
           </label>
@@ -143,6 +144,7 @@ const Join = () => {
               })}
               type="password"
               placeholder="비밀번호 확인*"
+              autoComplete="on"
             ></input>
             <p>{errors.passwordConfirm?.message}</p>
           </label>
