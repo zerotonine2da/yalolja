@@ -1,3 +1,5 @@
+<img width="1190" alt="image" src="https://github.com/zerotonine2da/yalolja/assets/96953412/fde62b65-36da-4602-944d-65ffe98e58fc">
+
 Yalolja Project 소개    
 -------  
 1. 프로젝트 : e-sports LOL 구단 유니폼 추천하는 사이트
